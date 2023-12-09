@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'profile_page.dart';
+import 'suplier_page.dart';
+import 'material_page.dart';
+import 'setting_page.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -19,23 +23,25 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
           ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Profile'),
-          ),
-          ListTile(
-            leading: Icon(Icons.business),
-            title: Text('Suplier'),
-          ),
-          ListTile(
-            leading: Icon(Icons.inventory),
-            title: Text('Material'),
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Setting'),
-          ),
+          buildDrawerItem(context, Icons.person, 'Profile', ProfilePage()),
+          buildDrawerItem(context, Icons.business, 'Suplier', SuplierPage()),
+          buildDrawerItem(context, Icons.inventory, 'Material', MaterialPag()),
+          buildDrawerItem(context, Icons.settings, 'Setting', SettingPage()),
         ],
+      ),
+    );
+  }
+
+  Widget buildDrawerItem(
+      BuildContext context, IconData icon, String title, Widget page) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => page));
+      },
+      child: ListTile(
+        leading: Icon(icon),
+        title: Text(title),
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'print_screen.dart'; // Import file print_screen.dart
+import 'print_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -30,15 +30,39 @@ class LoginScreen extends StatelessWidget {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Implement login logic here
                 if (isValidCredentials()) {
-                  navigateToPrintScreen(context);
+                  _navigateToPrintScreen(context);
                 } else {
                   // Handle invalid credentials
                   // You can show an error message or take other actions
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Invalid Credentials'),
+                        content:
+                            Text('Please enter valid username and password.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context); // Close the dialog
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 }
               },
               child: Text('Login'),
+            ),
+            SizedBox(height: 8),
+            TextButton(
+              onPressed: () {
+                _resetPassword(context);
+              },
+              child: Text('Forgot Password?'),
             ),
           ],
         ),
@@ -53,10 +77,33 @@ class LoginScreen extends StatelessWidget {
         passwordController.text.isNotEmpty;
   }
 
-  void navigateToPrintScreen(BuildContext context) {
-    Navigator.push(
+  void _navigateToPrintScreen(BuildContext context) {
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => PrintScreen()),
+    );
+  }
+
+  void _resetPassword(BuildContext context) {
+    // Implement your password reset logic here
+    // For simplicity, we'll just show a dialog with a message
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Password Reset'),
+          content: Text(
+              'An email with password reset instructions has been sent to your registered email address.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
