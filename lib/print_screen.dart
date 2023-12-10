@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'drawer.dart'; // Import file drawer.dart
+import 'drawer.dart';
+import 'package:flutter/services.dart';
+import 'suplier_page.dart';
+import 'material_page.dart';
 
 class PrintScreen extends StatefulWidget {
   @override
@@ -9,21 +12,15 @@ class PrintScreen extends StatefulWidget {
 class _PrintScreenState extends State<PrintScreen> {
   final TextEditingController noRecController = TextEditingController();
   final TextEditingController noPolController = TextEditingController();
+  final TextEditingController brutoController = TextEditingController();
+  final TextEditingController taraController = TextEditingController();
 
   bool isWiFiConnected = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<String> suplierList = [
-    'Suplier1',
-    'Suplier2',
-    'Suplier3'
-  ]; // Gantilah dengan data nyata
-  List<String> materialList = [
-    'Material1',
-    'Material2',
-    'Material3'
-  ]; // Gantilah dengan data nyata
+  List<String> suplierList = ['Suplier1', 'Suplier2', 'Suplier3'];
+  List<String> materialList = ['Material1', 'Material2', 'Material3'];
 
   String selectedSuplier = '';
   String selectedMaterial = '';
@@ -54,7 +51,7 @@ class _PrintScreenState extends State<PrintScreen> {
               onTap: () async {
                 final result = await showSearch(
                   context: context,
-                  delegate: _DataSearchDelegate(suplierList),
+                  delegate: _SuplierSearchDelegate(suplierList),
                 );
                 if (result != null) {
                   setState(() {
@@ -71,7 +68,7 @@ class _PrintScreenState extends State<PrintScreen> {
               onTap: () async {
                 final result = await showSearch(
                   context: context,
-                  delegate: _DataSearchDelegate(materialList),
+                  delegate: _MaterialSearchDelegate(materialList),
                 );
                 if (result != null) {
                   setState(() {
@@ -85,17 +82,30 @@ class _PrintScreenState extends State<PrintScreen> {
             SizedBox(height: 16),
             TextField(
               controller: noRecController,
-              decoration: InputDecoration(labelText: 'Nomor Rekening'),
+              decoration: InputDecoration(labelText: 'Nomor Rec'),
             ),
             SizedBox(height: 16),
             TextField(
               controller: noPolController,
-              decoration: InputDecoration(labelText: 'Nomor Polisi'),
+              decoration: InputDecoration(labelText: 'Nomor Pol'),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: brutoController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(labelText: 'Bruto'),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: taraController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(labelText: 'Tara'),
             ),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Implement print logic here
                 printData();
               },
               child: Text('Print'),
@@ -127,62 +137,108 @@ class _PrintScreenState extends State<PrintScreen> {
   }
 
   void printData() {
-    // Retrieve data from controllers
+    // Ambil data dari controller
     String suplier = selectedSuplier;
     String material = selectedMaterial;
     String noRec = noRecController.text;
     String noPol = noPolController.text;
+    String bruto = brutoController.text;
+    String tara = taraController.text;
 
-    // Construct the printed data
+    // Periksa jika salah satu dari kolom yang diperlukan kosong
+    if (suplier.isEmpty ||
+        material.isEmpty ||
+        noRec.isEmpty ||
+        noPol.isEmpty ||
+        bruto.isEmpty ||
+        tara.isEmpty) {
+      _tampilkanPesanError("Data belum lengkap diisi");
+      return;
+    }
+
+    // Konversi bruto dan tara ke tipe integer
+    int brutoValue = int.tryParse(bruto) ?? 0;
+    int taraValue = int.tryParse(tara) ?? 0;
+
+    // Bangun data yang akan dicetak
     String printedResult =
-        'Suplier: $suplier\nMaterial: $material\nNomor Rekening: $noRec\nNomor Polisi: $noPol';
+        'Suplier: $suplier\nMaterial: $material\nNomor Rec: $noRec\nNomor Pol: $noPol\nBruto: $brutoValue\nTara: $taraValue';
 
-    // Set the state to update the printed data
+    // Set state untuk memperbarui data yang dicetak
     setState(() {
       printedData = printedResult;
     });
 
-    // Implement logic to send data via WiFi
+    // Implementasikan logika untuk mengirim data melalui WiFi
     if (isWiFiConnected) {
-      // Implement logic to send data to the connected WiFi device
+      // Implementasikan logika untuk mengirim data ke perangkat WiFi yang terhubung
     } else {
-      // Handle the case where WiFi is not connected
+      // Tangani kasus di mana WiFi tidak terhubung
     }
+  }
+
+  void _tampilkanPesanError(String pesan) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(pesan),
+        duration: Duration(seconds: 3),
+      ),
+    );
   }
 
   void _toggleConnection() {
     if (isWiFiConnected) {
-      // Disconnect from WiFi
       _disconnectFromWiFi();
     } else {
-      // Connect to WiFi
       _connectToWiFi();
     }
   }
 
   void _connectToWiFi() {
-    // Implement logic to connect to WiFi
     setState(() {
       isWiFiConnected = true;
     });
   }
 
   void _disconnectFromWiFi() {
-    // Implement logic to disconnect from WiFi
     setState(() {
       isWiFiConnected = false;
     });
   }
 }
 
-class _DataSearchDelegate extends SearchDelegate<String> {
-  final List<String> dataList;
+class _SuplierSearchDelegate extends SearchDelegate<String> {
+  final List<String> suplierList;
 
-  _DataSearchDelegate(this.dataList);
+  _SuplierSearchDelegate(this.suplierList);
+
+  @override
+  InputDecorationTheme get searchFieldDecorationTheme => InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+        filled: true,
+        fillColor: Colors.grey[200],
+      );
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    return [IconButton(icon: Icon(Icons.clear), onPressed: () => query = '')];
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () => query = '',
+      ),
+      IconButton(
+        icon: Icon(Icons.search),
+        onPressed: () {
+          // Perform search logic if needed
+        },
+      ),
+    ];
   }
 
   @override
@@ -198,28 +254,144 @@ class _DataSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // ... (implementasi hasil pencarian)
     return Container();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestionList = query.isEmpty
-        ? dataList
-        : dataList
+        ? suplierList
+        : suplierList
             .where((data) => data.toLowerCase().contains(query.toLowerCase()))
             .toList();
 
-    return ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(suggestionList[index]),
-          onTap: () {
-            close(context, suggestionList[index]);
-          },
-        );
-      },
+    return Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16),
+            ...suggestionList.map((result) {
+              return ListTile(
+                title: Text(result),
+                onTap: () {
+                  close(context, result);
+                },
+              );
+            }),
+          ],
+        ),
+        Positioned(
+          bottom: 16,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SuplierPage()),
+                );
+              },
+              child: Text('Cek Suplier'),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MaterialSearchDelegate extends SearchDelegate<String> {
+  final List<String> materialList;
+
+  _MaterialSearchDelegate(this.materialList);
+
+  @override
+  InputDecorationTheme get searchFieldDecorationTheme => InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+        filled: true,
+        fillColor: Colors.grey[200],
+      );
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () => query = '',
+      ),
+      IconButton(
+        icon: Icon(Icons.search),
+        onPressed: () {
+          // Perform search logic if needed
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+      onPressed: () => close(context, ''),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Container();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = query.isEmpty
+        ? materialList
+        : materialList
+            .where((data) => data.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+
+    return Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ...suggestionList.map((result) {
+              return ListTile(
+                title: Text(result),
+                onTap: () {
+                  close(context, result);
+                },
+              );
+            }),
+          ],
+        ),
+        Positioned(
+          bottom: 16,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MaterialPag()),
+                );
+              },
+              child: Text('Cek Material'),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
