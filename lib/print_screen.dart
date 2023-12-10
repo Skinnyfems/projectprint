@@ -285,7 +285,7 @@ class _SuplierSearchDelegate extends SearchDelegate<String> {
                   MaterialPageRoute(builder: (context) => SuplierPage()),
                 );
               },
-              child: Text('Cek Suplier'),
+              child: Text('Tambah Suplier'),
             ),
           ),
         ),
@@ -371,7 +371,7 @@ class _MaterialSearchDelegate extends SearchDelegate<String> {
                   MaterialPageRoute(builder: (context) => MaterialPag()),
                 );
               },
-              child: Text('Cek Material'),
+              child: Text('Tambah Material'),
             ),
           ),
         ),
