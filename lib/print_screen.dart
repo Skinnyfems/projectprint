@@ -182,6 +182,7 @@ class _PrintScreenState extends State<PrintScreen> {
       SnackBar(
         content: Text(pesan),
         duration: Duration(seconds: 3),
+        backgroundColor: Colors.deepOrange,
       ),
     );
   }
