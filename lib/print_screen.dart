@@ -214,14 +214,6 @@ class _SuplierSearchDelegate extends SearchDelegate<String> {
 
   @override
   InputDecorationTheme get searchFieldDecorationTheme => InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.blue),
-        ),
-        filled: true,
         fillColor: Colors.grey[200],
       );
 
@@ -309,14 +301,6 @@ class _MaterialSearchDelegate extends SearchDelegate<String> {
 
   @override
   InputDecorationTheme get searchFieldDecorationTheme => InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.blue),
-        ),
-        filled: true,
         fillColor: Colors.grey[200],
       );
 
