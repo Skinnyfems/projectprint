@@ -21,7 +21,7 @@ class LoginRegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login/Register'),
+        title: Text('Login/Joined'),
       ),
       body: Center(
         child: Column(
@@ -35,7 +35,7 @@ class LoginRegisterScreen extends StatelessWidget {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => _navigateToRegister(context),
-              child: Text('Register'),
+              child: Text('Joined'),
             ),
           ],
         ),

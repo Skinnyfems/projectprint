@@ -3,6 +3,7 @@ import 'profile_page.dart';
 import 'suplier_page.dart';
 import 'material_page.dart';
 import 'setting_page.dart';
+import 'user.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -24,6 +25,7 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           buildDrawerItem(context, Icons.person, 'Profile', ProfilePage()),
+          buildDrawerItem(context, Icons.co_present, 'User', UserPage()),
           buildDrawerItem(context, Icons.business, 'Suplier', SuplierPage()),
           buildDrawerItem(context, Icons.inventory, 'Material', MaterialPag()),
           buildDrawerItem(context, Icons.settings, 'Setting', SettingPage()),

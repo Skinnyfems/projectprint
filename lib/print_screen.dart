@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'drawer.dart';
-import 'package:flutter/services.dart';
 import 'suplier_page.dart';
 import 'material_page.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 class PrintScreen extends StatefulWidget {
   @override
@@ -26,12 +27,15 @@ class _PrintScreenState extends State<PrintScreen> {
   String selectedMaterial = '';
   String printedData = '';
 
+  String selectedWeightUnit = 'KG';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Print'),
+        title: Text('PRINT'),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.menu),
@@ -46,97 +50,158 @@ class _PrintScreenState extends State<PrintScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              readOnly: true,
-              onTap: () async {
-                final result = await showSearch(
-                  context: context,
-                  delegate: _SuplierSearchDelegate(suplierList),
-                );
-                if (result != null) {
-                  setState(() {
-                    selectedSuplier = result;
-                  });
-                }
-              },
-              controller: TextEditingController(text: selectedSuplier),
-              decoration: InputDecoration(labelText: 'Suplier'),
+            _buildLogo(), // Pindahkan logo ke bawah tulisan 'PRINT'
+            SizedBox(height: 20),
+            _buildTextField(
+              'Suplier',
+              selectedSuplier,
+              _pilihSuplier,
             ),
             SizedBox(height: 16),
-            TextField(
-              readOnly: true,
-              onTap: () async {
-                final result = await showSearch(
-                  context: context,
-                  delegate: _MaterialSearchDelegate(materialList),
-                );
-                if (result != null) {
-                  setState(() {
-                    selectedMaterial = result;
-                  });
-                }
-              },
-              controller: TextEditingController(text: selectedMaterial),
-              decoration: InputDecoration(labelText: 'Material'),
+            _buildTextField(
+              'Material',
+              selectedMaterial,
+              _pilihMaterial,
             ),
             SizedBox(height: 16),
-            TextField(
+            _buildTextField(
+              'Nomor Rec',
+              noRecController.text,
+              null,
               controller: noRecController,
-              decoration: InputDecoration(labelText: 'Nomor Rec'),
             ),
             SizedBox(height: 16),
-            TextField(
+            _buildTextField(
+              'Nomor Pol',
+              noPolController.text,
+              null,
               controller: noPolController,
-              decoration: InputDecoration(labelText: 'Nomor Pol'),
             ),
             SizedBox(height: 16),
-            TextField(
-              controller: brutoController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(labelText: 'Bruto'),
-            ),
+            _buildInputBerat('Bruto', brutoController),
             SizedBox(height: 16),
-            TextField(
-              controller: taraController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(labelText: 'Tara'),
-            ),
-            SizedBox(height: 16),
+            _buildInputBerat('Tara', taraController),
             ElevatedButton(
               onPressed: () {
-                printData();
+                cetakData();
               },
-              child: Text('Print'),
+              child: Text('PRINT'),
             ),
             SizedBox(height: 16),
-            Container(
-              padding: EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Text(
-                'Hasil Print:\n$printedData',
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ),
+            _buildDataTerCetak(),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _toggleConnection();
-        },
-        tooltip: 'Connect/Disconnect WiFi',
-        child: Icon(Icons.wifi),
+      floatingActionButton: SizedBox(
+        width: 100,
+        height: 40,
+        child: FloatingActionButton.extended(
+          onPressed: () {},
+          label: Text('Cari', style: TextStyle(fontSize: 14)),
+          tooltip: 'Search Wifi',
+          icon: Icon(Icons.search, size: 20),
+        ),
       ),
       endDrawer: AppDrawer(),
     );
   }
 
-  void printData() {
+  Widget _buildLogo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/invoices.png',
+          height: 130,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField(String label, String value, Function()? onTap,
+      {TextEditingController? controller}) {
+    return TextField(
+      readOnly: onTap != null,
+      onTap: onTap,
+      controller: controller ?? TextEditingController(text: value),
+      decoration: InputDecoration(labelText: label),
+    );
+  }
+
+  Widget _buildInputBerat(String label, TextEditingController controller) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            controller: controller,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,3}')),
+            ],
+            decoration: InputDecoration(
+              labelText: label,
+            ),
+          ),
+        ),
+        SizedBox(width: 8),
+        DropdownButton<String>(
+          value: selectedWeightUnit,
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedWeightUnit = newValue!;
+            });
+          },
+          items: <String>['KG', 'G', 'Ton']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDataTerCetak() {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Text(
+        'HASIL PRINT:\n$printedData',
+        style: TextStyle(fontSize: 16.0),
+      ),
+    );
+  }
+
+  void _pilihSuplier() async {
+    final result = await showSearch(
+      context: context,
+      delegate: _SuplierSearchDelegate(suplierList),
+    );
+    if (result != null) {
+      setState(() {
+        selectedSuplier = result;
+      });
+    }
+  }
+
+  void _pilihMaterial() async {
+    final result = await showSearch(
+      context: context,
+      delegate: _MaterialSearchDelegate(materialList),
+    );
+    if (result != null) {
+      setState(() {
+        selectedMaterial = result;
+      });
+    }
+  }
+
+  void cetakData() {
     // Ambil data dari controller
     String suplier = selectedSuplier;
     String material = selectedMaterial;
@@ -156,13 +221,22 @@ class _PrintScreenState extends State<PrintScreen> {
       return;
     }
 
-    // Konversi bruto dan tara ke tipe integer
-    int brutoValue = int.tryParse(bruto) ?? 0;
-    int taraValue = int.tryParse(tara) ?? 0;
+    NumberFormat numberFormat = NumberFormat('#,##0.###');
+
+    double brutoValue = (numberFormat.parse(bruto) as double).toDouble();
+    double taraValue = (numberFormat.parse(tara) as double).toDouble();
+
+    double nettoValue = brutoValue - taraValue;
+
+    String weightUnit = selectedWeightUnit;
+
+    String formattedBruto = numberFormat.format(brutoValue);
+    String formattedTara = numberFormat.format(taraValue);
+    String formattedNetto = numberFormat.format(nettoValue);
 
     // Bangun data yang akan dicetak
     String printedResult =
-        'Suplier: $suplier\nMaterial: $material\nNomor Rec: $noRec\nNomor Pol: $noPol\nBruto: $brutoValue\nTara: $taraValue';
+        'Suplier: $suplier\nMaterial: $material\nNomor Rec: $noRec\nNomor Pol: $noPol\nBruto: $formattedBruto $weightUnit\nTara: $formattedTara $weightUnit\nNetto: $formattedNetto $weightUnit';
 
     // Set state untuk memperbarui data yang dicetak
     setState(() {
@@ -186,26 +260,6 @@ class _PrintScreenState extends State<PrintScreen> {
       ),
     );
   }
-
-  void _toggleConnection() {
-    if (isWiFiConnected) {
-      _disconnectFromWiFi();
-    } else {
-      _connectToWiFi();
-    }
-  }
-
-  void _connectToWiFi() {
-    setState(() {
-      isWiFiConnected = true;
-    });
-  }
-
-  void _disconnectFromWiFi() {
-    setState(() {
-      isWiFiConnected = false;
-    });
-  }
 }
 
 class _SuplierSearchDelegate extends SearchDelegate<String> {
@@ -228,7 +282,7 @@ class _SuplierSearchDelegate extends SearchDelegate<String> {
       IconButton(
         icon: Icon(Icons.search),
         onPressed: () {
-          // Perform search logic if needed
+          // Lakukan logika pencarian jika diperlukan
         },
       ),
     ];
@@ -315,7 +369,7 @@ class _MaterialSearchDelegate extends SearchDelegate<String> {
       IconButton(
         icon: Icon(Icons.search),
         onPressed: () {
-          // Perform search logic if needed
+          // Lakukan logika pencarian jika diperlukan
         },
       ),
     ];

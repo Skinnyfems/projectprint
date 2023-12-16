@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart'; // Import file login_screen.dart
+import 'login_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController inviteController = TextEditingController();
+
+  bool _isPasswordVisible = false;
+  bool _isInviteVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: Text('Joined'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -35,8 +44,42 @@ class RegisterScreen extends StatelessWidget {
             SizedBox(height: 16),
             TextFormField(
               controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    // Toggle visibility of password
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                  icon: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                ),
+              ),
+              obscureText: !_isPasswordVisible,
+            ),
+            SizedBox(height: 16),
+            TextFormField(
+              controller: inviteController,
+              decoration: InputDecoration(
+                labelText: 'Code Invit',
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    // Toggle visibility of invite code
+                    setState(() {
+                      _isInviteVisible = !_isInviteVisible;
+                    });
+                  },
+                  icon: Icon(
+                    _isInviteVisible ? Icons.visibility : Icons.visibility_off,
+                  ),
+                ),
+              ),
+              obscureText: !_isInviteVisible,
             ),
             SizedBox(height: 16),
             ElevatedButton(
@@ -49,7 +92,7 @@ class RegisterScreen extends StatelessWidget {
                   // You can show an error message or take other actions
                 }
               },
-              child: Text('Register'),
+              child: Text('Join'),
             ),
           ],
         ),
@@ -63,7 +106,8 @@ class RegisterScreen extends StatelessWidget {
     return emailController.text.isNotEmpty &&
         usernameController.text.isNotEmpty &&
         fullNameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty;
+        passwordController.text.isNotEmpty &&
+        inviteController.text.isNotEmpty;
   }
 
   void navigateToLoginScreen(BuildContext context) {
