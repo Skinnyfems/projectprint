@@ -11,7 +11,6 @@ Future<void> cetakStruk(String printedResult) async {
         await printer.connect('192.168.0.123', port: 9100);
 
     if (hasilKoneksi == PosPrintResult.success) {
-      // Menggunakan printedResult sebagai parameter
       ujiCetak(printer, printedResult);
     } else {
       print('Gagal terhubung ke printer. Periksa pengaturan koneksi.');
