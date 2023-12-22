@@ -4,6 +4,7 @@ import 'suplier_page.dart';
 import 'material_page.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
+import 'printer.dart';
 
 class PrintScreen extends StatefulWidget {
   @override
@@ -83,7 +84,8 @@ class _PrintScreenState extends State<PrintScreen> {
             _buildInputBerat('Tara', taraController),
             ElevatedButton(
               onPressed: () {
-                cetakData();
+                cetakStruk(printedData);
+                cetakdata();
               },
               child: Text('PRINT'),
             ),
@@ -202,47 +204,36 @@ class _PrintScreenState extends State<PrintScreen> {
     }
   }
 
-  void cetakData() {
-    // Ambil data dari controller
-    String suplier = selectedSuplier;
-    String material = selectedMaterial;
-    String noRec = noRecController.text;
-    String noPol = noPolController.text;
-    String bruto = brutoController.text;
-    String tara = taraController.text;
-
-    // Periksa jika salah satu dari kolom yang diperlukan kosong
-    if (suplier.isEmpty ||
-        material.isEmpty ||
-        noRec.isEmpty ||
-        noPol.isEmpty ||
-        bruto.isEmpty ||
-        tara.isEmpty) {
-      _tampilkanPesanError("Data belum lengkap diisi");
-      return;
-    }
-
-    NumberFormat numberFormat = NumberFormat('#,##0.###');
-
-    double brutoValue = (numberFormat.parse(bruto) as double).toDouble();
-    double taraValue = (numberFormat.parse(tara) as double).toDouble();
-
-    double nettoValue = brutoValue - taraValue;
-
-    String weightUnit = selectedWeightUnit;
-
-    String formattedBruto = numberFormat.format(brutoValue);
-    String formattedTara = numberFormat.format(taraValue);
-    String formattedNetto = numberFormat.format(nettoValue);
-
-    // Bangun data yang akan dicetak
+  void cetakdata() {
+    // Ambil data dari controller dan variabel lainnya
     String printedResult =
-        'Suplier: $suplier\nMaterial: $material\nNomor Rec: $noRec\nNomor Pol: $noPol\nBruto: $formattedBruto $weightUnit\nTara: $formattedTara $weightUnit\nNetto: $formattedNetto $weightUnit';
+        'Suplier: $selectedSuplier\nMaterial: $selectedMaterial\nNomor Rec: ${noRecController.text}\nNomor Pol: ${noPolController.text}\nBruto: ${brutoController.text} $selectedWeightUnit\nTara: ${taraController.text} $selectedWeightUnit\nNetto: ${hitungNetto()} $selectedWeightUnit';
 
-    // Set state untuk memperbarui data yang dicetak
     setState(() {
       printedData = printedResult;
     });
+
+    printKePrinter(printedResult);
+  }
+
+// Fungsi baru untuk menghitung netto
+  String hitungNetto() {
+    NumberFormat numberFormat = NumberFormat('#,##0.###');
+
+    double brutoValue =
+        (numberFormat.parse(brutoController.text) as double).toDouble();
+    double taraValue =
+        (numberFormat.parse(taraController.text) as double).toDouble();
+
+    double nettoValue = brutoValue - taraValue;
+
+    return numberFormat.format(nettoValue);
+  }
+
+// Fungsi printKePrinter yang telah diperbarui
+  Future<void> printKePrinter(String printedResult) async {
+    // Sisipkan logika pencetakan ke printer di sini
+    // Pastikan Anda telah memasukkan fungsi pencetakan ke printer (seperti yang telah diberikan sebelumnya)
   }
 
   void _tampilkanPesanError(String pesan) {
