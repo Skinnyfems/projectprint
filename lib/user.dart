@@ -10,7 +10,6 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   String nama = 'John Doe';
   String email = 'john.doe@example.com';
-  String noHp = '081234567890';
 
   // Fungsi untuk menghasilkan kode undangan acak
   String generateRandomCode() {
@@ -77,9 +76,6 @@ class _UserPageState extends State<UserPage> {
             ),
             ListTile(
               title: Text('E-mail: $email'),
-            ),
-            ListTile(
-              title: Text('No. HP: $noHp'),
             ),
             SizedBox(height: 20),
             ElevatedButton(

@@ -92,15 +92,16 @@ class _PrintScreenState extends State<PrintScreen> {
           ],
         ),
       ),
-      floatingActionButton: SizedBox(
-        width: 100,
-        height: 40,
-        child: FloatingActionButton.extended(
-          onPressed: () {},
-          label: Text('Cari', style: TextStyle(fontSize: 14)),
-          tooltip: 'Search Wifi',
-          icon: Icon(Icons.search, size: 20),
-        ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MaterialPag()),
+          );
+        },
+        label: Text('Cari', style: TextStyle(fontSize: 14)),
+        tooltip: 'Search Printer',
+        icon: Icon(Icons.search, size: 20),
       ),
       endDrawer: AppDrawer(),
     );
@@ -242,13 +243,6 @@ class _PrintScreenState extends State<PrintScreen> {
     setState(() {
       printedData = printedResult;
     });
-
-    // Implementasikan logika untuk mengirim data melalui WiFi
-    if (isWiFiConnected) {
-      // Implementasikan logika untuk mengirim data ke perangkat WiFi yang terhubung
-    } else {
-      // Tangani kasus di mana WiFi tidak terhubung
-    }
   }
 
   void _tampilkanPesanError(String pesan) {

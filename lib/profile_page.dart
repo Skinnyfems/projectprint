@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'print_screen.dart';
+import "api_service.dart";
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -94,5 +95,20 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  void someFunction() async {
+    try {
+      // Contoh penggunaan fungsi getProfile
+      Map<String, dynamic> profileResponse = await getProfile('example_user');
+      print(profileResponse);
+
+      // Contoh penggunaan fungsi updateProfile
+      Map<String, dynamic> updateProfileResponse = await updateProfile(
+          'example_user', 'new_example_user', 'new_email@example.com');
+      print(updateProfileResponse);
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }

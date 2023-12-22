@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'print_screen.dart';
+import 'api_service.dart';
 
 class SuplierPage extends StatefulWidget {
   @override
@@ -181,5 +182,28 @@ class _SuplierPageState extends State<SuplierPage> {
         ),
       ),
     );
+  }
+
+  void someFunction() async {
+    try {
+      // Contoh penggunaan fungsi getSuppliers
+      List<Map<String, dynamic>> suppliers = await getSuppliers();
+      print(suppliers);
+
+      // Contoh penggunaan fungsi addSupplier
+      Map<String, dynamic> newSupplier = await addSupplier('Supplier Baru');
+      print(newSupplier);
+
+      // Contoh penggunaan fungsi updateSupplier
+      Map<String, dynamic> updatedSupplier =
+          await updateSupplier(1, 'Supplier Baru Updated');
+      print(updatedSupplier);
+
+      // Contoh penggunaan fungsi deleteSupplier
+      await deleteSupplier(1);
+      print('Suplier berhasil dihapus');
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }

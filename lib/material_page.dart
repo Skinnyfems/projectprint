@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'print_screen.dart';
+import 'api_service.dart';
 
 class MaterialPag extends StatefulWidget {
   @override
@@ -171,5 +172,28 @@ class _MaterialPageState extends State<MaterialPag> {
         ),
       ),
     );
+  }
+
+  void someFunction() async {
+    try {
+      // Contoh penggunaan fungsi getMaterials
+      List<Map<String, dynamic>> materials = await getMaterials();
+      print(materials);
+
+      // Contoh penggunaan fungsi addMaterial
+      Map<String, dynamic> newMaterial = await addMaterial('Material Baru');
+      print(newMaterial);
+
+      // Contoh penggunaan fungsi updateMaterial
+      Map<String, dynamic> updatedMaterial =
+          await updateMaterial(1, 'Material Baru Updated');
+      print(updatedMaterial);
+
+      // Contoh penggunaan fungsi deleteMaterial
+      await deleteMaterial(1);
+      print('Material berhasil dihapus');
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'print_screen.dart';
+import 'api_service.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -105,5 +106,15 @@ class LoginScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  void someFunction() async {
+    try {
+      Map<String, dynamic> loginResponse =
+          await login('example_user', 'example_password');
+      print(loginResponse);
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }

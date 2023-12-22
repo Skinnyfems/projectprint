@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
+import 'api_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -115,5 +116,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),
     );
+  }
+
+  void someFunction() async {
+    try {
+      Map<String, dynamic> registerResponse = await register('new_user',
+          'new_password', 'new_email@example.com', 'New User', 'unique_code');
+      print(registerResponse);
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }
