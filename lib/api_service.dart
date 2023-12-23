@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-const String baseUrl = 'alamat/backendAPI';
+const String baseUrl = 'http://192.168.232.208:5000';
 
 Future<List<Map<String, dynamic>>> getMaterials() async {
   final response = await http.get(
@@ -162,7 +162,7 @@ Future<Map<String, dynamic>> updateProfile(
 
 Future<Map<String, dynamic>> login(String username, String password) async {
   final response = await http.post(
-    Uri.parse('$baseUrl/login_screen'),
+    Uri.parse('$baseUrl/api/login'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
