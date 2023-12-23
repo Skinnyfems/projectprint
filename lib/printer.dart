@@ -28,6 +28,12 @@ void ujiCetak(NetworkPrinter printer, String printedResult) {
     // Menggunakan printedResult sebagai konten struk
     printer.text(printedResult);
     // Tambahkan konten struk lainnya sesuai kebutuhan
+
+    // Jangan lupa untuk memanggil printer.cut() jika perlu memotong kertas
+    printer.cut();
+
+    // Jika Anda menggunakan line feed, tambahkan line feed di akhir
+    printer.feed(2);
   } catch (e) {
     print('Terjadi kesalahan selama proses pencetakan: $e');
   }

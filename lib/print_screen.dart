@@ -84,8 +84,12 @@ class _PrintScreenState extends State<PrintScreen> {
             _buildInputBerat('Tara', taraController),
             ElevatedButton(
               onPressed: () {
-                cetakStruk(printedData);
-                cetakdata();
+                if (isDataValid()) {
+                  cetakStruk(printedData);
+                  cetakdata();
+                } else {
+                  _tampilkanPesanError('HARAP ISI SEMUA DATA.');
+                }
               },
               child: Text('PRINT'),
             ),
@@ -95,12 +99,7 @@ class _PrintScreenState extends State<PrintScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MaterialPag()),
-          );
-        },
+        onPressed: () {},
         label: Text('Cari', style: TextStyle(fontSize: 14)),
         tooltip: 'Search Printer',
         icon: Icon(Icons.search, size: 20),
@@ -216,6 +215,15 @@ class _PrintScreenState extends State<PrintScreen> {
     printKePrinter(printedResult);
   }
 
+  bool isDataValid() {
+    return selectedSuplier.isNotEmpty &&
+        selectedMaterial.isNotEmpty &&
+        noRecController.text.isNotEmpty &&
+        noPolController.text.isNotEmpty &&
+        brutoController.text.isNotEmpty &&
+        taraController.text.isNotEmpty;
+  }
+
 // Fungsi baru untuk menghitung netto
   String hitungNetto() {
     NumberFormat numberFormat = NumberFormat('#,##0.###');
@@ -230,11 +238,7 @@ class _PrintScreenState extends State<PrintScreen> {
     return numberFormat.format(nettoValue);
   }
 
-// Fungsi printKePrinter yang telah diperbarui
-  Future<void> printKePrinter(String printedResult) async {
-    // Sisipkan logika pencetakan ke printer di sini
-    // Pastikan Anda telah memasukkan fungsi pencetakan ke printer (seperti yang telah diberikan sebelumnya)
-  }
+  Future<void> printKePrinter(String printedResult) async {}
 
   void _tampilkanPesanError(String pesan) {
     ScaffoldMessenger.of(context).showSnackBar(

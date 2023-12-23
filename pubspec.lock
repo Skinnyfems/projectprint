@@ -9,14 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.9"
-  args:
-    dependency: transitive
-    description:
-      name: args
-      sha256: eef6c46b622e0494a36c5a12d10d77fb4e855501a91c1b9ef9339326e58f0596
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.2"
   async:
     dependency: transitive
     description:
@@ -29,50 +21,34 @@ packages:
     dependency: "direct main"
     description:
       name: bonsoir
-      sha256: "7dd7f87f154c0a16ef569b685aa6d0556d4cc281ae7565420d9f639febefa06e"
+      sha256: d5b0cb2d38ac8b0057990e3046ef0e4552b63f6d636284c7e57ac2b257e2000a
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "2.2.0+1"
   bonsoir_android:
     dependency: transitive
     description:
       name: bonsoir_android
-      sha256: "2f396843c3a32e41cec40217db4ae6dc98dc817b7c4d0e587e9785469ea7438c"
+      sha256: "21c38f707df0755b5bedd05c5fd52cb5e9fa9f4a4efbcef94cb9669029c73d75"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
+    version: "2.2.0"
   bonsoir_darwin:
     dependency: transitive
     description:
       name: bonsoir_darwin
-      sha256: cd2191242348c5a8dcda3ded9acde2ebad8ca280095f931deedffcaee1555b9b
+      sha256: fe36cb2acec37c175213364a91ae1b2866a47e061f18b11322ac8e0ca39d5e61
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
-  bonsoir_linux:
-    dependency: transitive
-    description:
-      name: bonsoir_linux
-      sha256: "86619a8c9483f04295d48b7d1eb1bdf9416d7e50f50d9fdd89393571a6e95260"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.0"
+    version: "2.2.0+1"
   bonsoir_platform_interface:
     dependency: transitive
     description:
       name: bonsoir_platform_interface
-      sha256: fc3bc3e6c5108520c84b95b537e03eaa135e4a8e1519ad948652d03ffdba3b33
+      sha256: "97081d861ff2e7b45edd9e17ae1b35530d5a7ec561e3377e00da2e0cfae500dc"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
-  bonsoir_windows:
-    dependency: transitive
-    description:
-      name: bonsoir_windows
-      sha256: "3b4ae8dae7d3481c5b8a0df74f16274ba644f253daa54dce17d83f6cc1d33c3d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.0"
+    version: "2.2.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -137,14 +113,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      sha256: "365c771ac3b0e58845f39ec6deebc76e3276aa9922b0cc60840712094d9047ac"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.10"
   esc_pos_printer:
     dependency: "direct main"
     description:
@@ -154,7 +122,7 @@ packages:
     source: hosted
     version: "4.1.0"
   esc_pos_utils:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: esc_pos_utils
       sha256: "8ec0013d7a7f1e790ced6b09b95ce3bf2c6f9468a3e2bc49ece000761d86c6f8"
@@ -190,6 +158,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_esc_pos_network:
+    dependency: "direct main"
+    description:
+      name: flutter_esc_pos_network
+      sha256: "4d101d9c26f18eada8db03439662d518531408909f4b7174b40cbe7a490e0c95"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  flutter_esc_pos_utils:
+    dependency: transitive
+    description:
+      name: flutter_esc_pos_utils
+      sha256: "0c55e4ebe0639ba6d93ad88a8fbd1b3a31f2ff3db0fc3dd0d357edc16f6656bf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.8"
   flutter_lints:
     dependency: "direct dev"
     description:
