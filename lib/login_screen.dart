@@ -31,30 +31,12 @@ class LoginScreen extends StatelessWidget {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                if (isValidCredentials()) {
-                  _navigateToPrintScreen(context);
-                } else {
-                  // Handle invalid credentials
-                  // You can show an error message or take other actions
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Invalid Credentials'),
-                        content:
-                            Text('Please enter valid username and password.'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Close the dialog
-                            },
-                            child: Text('OK'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PrintScreen(),
+                  ),
+                );
               },
               child: Text('Login'),
             ),
@@ -71,11 +53,41 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  bool isValidCredentials() {
-    // Implement your login validation logic here
-    // For simplicity, we're assuming valid credentials for any non-empty input
-    return usernameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty;
+  void isValidCredentials(BuildContext context) {
+    if (usernameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty) {
+      login(usernameController.text, passwordController.text)
+          .then((loginResponse) {
+        // Periksa respon dari server backend
+        if (loginResponse['success']) {
+          // Login berhasil
+          _navigateToPrintScreen(context);
+        } else {
+          // Tangani kegagalan login
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Kredensial Tidak Valid'),
+                content:
+                    Text('Silakan masukkan username dan password yang valid.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Tutup dialog
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }).catchError((error) {
+        // Tangani error dari login API
+        print('Error: $error');
+      });
+    }
   }
 
   void _navigateToPrintScreen(BuildContext context) {
@@ -86,8 +98,6 @@ class LoginScreen extends StatelessWidget {
   }
 
   void _resetPassword(BuildContext context) {
-    // Implement your password reset logic here
-    // For simplicity, we'll just show a dialog with a message
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -106,15 +116,5 @@ class LoginScreen extends StatelessWidget {
         );
       },
     );
-  }
-
-  void someFunction() async {
-    try {
-      Map<String, dynamic> loginResponse =
-          await login('example_user', 'example_password');
-      print(loginResponse);
-    } catch (e) {
-      print('Error: $e');
-    }
   }
 }

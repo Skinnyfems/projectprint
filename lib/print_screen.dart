@@ -5,6 +5,7 @@ import 'material_page.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'printer.dart';
+import 'search_printer.dart';
 
 class PrintScreen extends StatefulWidget {
   @override
@@ -51,7 +52,7 @@ class _PrintScreenState extends State<PrintScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildLogo(), // Pindahkan logo ke bawah tulisan 'PRINT'
+            _buildLogo(),
             SizedBox(height: 20),
             _buildTextField(
               'Suplier',
@@ -99,7 +100,33 @@ class _PrintScreenState extends State<PrintScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          getIPAddress().then((currentIP) {
+            List<List<String>> ipRange = generateIPRange(currentIP);
+            for (List<String> ipParts in ipRange) {
+              String ip = ipParts.join('.');
+              if (ip != currentIP) {}
+            }
+            print('IP LIST:\n$currentIP');
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('SEARCH IP'),
+                  content: Text(currentIP),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          });
+        },
         label: Text('Cari', style: TextStyle(fontSize: 14)),
         tooltip: 'Search Printer',
         icon: Icon(Icons.search, size: 20),

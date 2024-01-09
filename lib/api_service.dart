@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-const String baseUrl = 'http://192.168.232.208:5000';
+const String baseUrl = 'http://127.0.0.1:5000';
 
 Future<List<Map<String, dynamic>>> getMaterials() async {
   final response = await http.get(
