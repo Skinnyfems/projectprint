@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'suplier_page.dart';
@@ -30,6 +32,35 @@ class _PrintScreenState extends State<PrintScreen> {
   String printedData = '';
 
   String selectedWeightUnit = 'KG';
+
+  Future<void> _handleButtonPress(BuildContext context) async {
+    BuildContext localContext = context;
+    String currentIP = await getIPAddress();
+    List<List<String>> ipRange = generateIPRange(currentIP);
+    showDialog(
+      context: localContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('SEARCH IP'),
+          content: Text(currentIP),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    await Future.forEach(ipRange, (List<String> ipParts) async {
+      String ip = ipParts.join('.');
+      bool opened = await checkOpenPort(ip, 80);
+      print('$ip = $opened');
+      // if (ip != currentIP) {}
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,31 +132,7 @@ class _PrintScreenState extends State<PrintScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          getIPAddress().then((currentIP) {
-            List<List<String>> ipRange = generateIPRange(currentIP);
-            for (List<String> ipParts in ipRange) {
-              String ip = ipParts.join('.');
-              if (ip != currentIP) {}
-            }
-            print('IP LIST:\n$currentIP');
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('SEARCH IP'),
-                  content: Text(currentIP),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('OK'),
-                    ),
-                  ],
-                );
-              },
-            );
-          });
+          _handleButtonPress(context);
         },
         label: Text('Cari', style: TextStyle(fontSize: 14)),
         tooltip: 'Search Printer',
