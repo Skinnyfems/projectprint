@@ -1,0 +1,35 @@
+swagger: "2.0"
+info:
+  title: "Sample API"
+  description: "A simple API with Flask and Flasgger"
+  version: "1.0"
+
+definitions:
+  Data:
+    type: object
+    properties:
+      key1:
+        type: string
+      key2:
+        type: integer
+
+paths:
+  /api/data:
+    get:
+      description: "Get data endpoint"
+      responses:
+        200:
+          description: "A successful response"
+
+    post:
+      description: "Post data endpoint"
+      parameters:
+        - name: data
+          in: body
+          description: "The data to be posted"
+          required: true
+          schema:
+            $ref: "#/definitions/Data"
+      responses:
+        200:
+          description: "A successful response"

@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+#  flask:
+#    build: .
+#    ports:
+#      - "4030:5000"
+#    depends_on:
+#      - mysql
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db
+    ports:
+      - "33066:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "9990:80"
+    depends_on:
+      - mysql
